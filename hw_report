@@ -1,0 +1,11 @@
+200686756 Dekel Matalon dekel2003@gmail.com
+306884891 Andrey Isakov andreyisakov7@gmail.com
+
+SQL account is working fine.
+
+Progress:
+we understand the assigment,
+start implementing and ran the first query (add user) successfully,
+even though we still don't know what to do if the table is empty,
+and the subquery (SELECT MAX(id) FROM users) +1 fails.
+

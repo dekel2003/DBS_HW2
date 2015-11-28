@@ -38,10 +38,17 @@ void* addUser(const char* name)
 	
 	sprintf(cmd,"INSERT INTO users(id, name) "
 			"VALUES ( (SELECT MAX(id) FROM users) +1 , '%s' )", name );	
+			
+	printf("%s\n",cmd);
 	
 	res = PQexec(conn,cmd);
+	
+	printf("%s\n",res);
+	
+	printf("%d\n",PQresultStatus(res));
+	
 
-	if(!res || PQresultStatus(res) != PGRES_TUPLES_OK)
+	if(!res || PQresultStatus(res) != PGRES_COMMAND_OK)
 	{
 		fprintf(stderr, "Error executing query: %s\n",
 		PQresultErrorMessage(res));
@@ -61,4 +68,23 @@ FROM table t1
 WHERE NOT EXISTS(SELECT * FROM table t2 WHERE t2.Id = t1.Id + 1)
 ORDER BY t1.Id
 
+<<<<<<< HEAD
 */
+=======
+
+void* addUserMin        (const char*    name){}
+void* removeUser        (const char*    id){}
+void* addPhoto          (const char*    user_id,
+                         const char*    photo_id){}
+void* tagPhoto          (const char*    user_id,
+                         const char*    photo_id,
+                         const char*    info){}
+void* photosTags        (){}
+void* search            (const char*    word){}
+void* commonTags        (const char*    k){}
+void* mostCommonTags    (const char*    k){}
+void* similarPhotos     (const char*    k,
+                         const char*    j){}
+void* autoPhotoOnTagOn  (){}
+void* autoPhotoOnTagOFF (){}
+>>>>>>> 9d5ca3b200e86ef1656093522b7641959a9110a2

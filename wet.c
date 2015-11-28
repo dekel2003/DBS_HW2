@@ -48,7 +48,7 @@ void* addUser(const char* name)
 	printf("%d\n",PQresultStatus(res));
 	
 
-	if(!res || PQresultStatus(res) != PGRES_TUPLES_OK)
+	if(!res || PQresultStatus(res) != PGRES_COMMAND_OK)
 	{
 		fprintf(stderr, "Error executing query: %s\n",
 		PQresultErrorMessage(res));

@@ -53,5 +53,12 @@ void* addUser(const char* name)
 	char* id = PQgetvalue(res, 0, 0);
 	printf(ADD_USER, id);
 }
+/*
+Find the first row where there does not exist a row with Id + 10
 
+SELECT TOP 1 t1.Id+1 
+FROM table t1
+WHERE NOT EXISTS(SELECT * FROM table t2 WHERE t2.Id = t1.Id + 1)
+ORDER BY t1.Id
 
+*/

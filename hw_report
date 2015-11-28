@@ -8,4 +8,4 @@ we understand the assigment,
 start implementing and ran the first query (add user) successfully,
 even though we still don't know what to do if the table is empty,
 and the subquery (SELECT MAX(id) FROM users) +1 fails.
-
+can we use the SQL COALESCE command?

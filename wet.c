@@ -47,7 +47,11 @@ void* addUser(const char* name)
 		PQresultErrorMessage(res));
 		PQclear(res);
 	}
-
+	
+	res = PQexec(conn,"(SELECT MAX(id) FROM users)");
+	
+	char* id = PQgetvalue(res, 0, 0):
+	printf(ADD_USER, id);
 }
 
 

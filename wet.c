@@ -36,7 +36,6 @@ void* addUser(const char* name)
 	PGresult *res;
 	
 	sprintf(cmd,"INSERT INTO users(id, name) "
-			"VALUES ( (SELECT MAX(id) FROM users) +1 , '%s' )", name );	
 			"VALUES ( (SELECT COALESCE(MAX(id), -1) FROM users) + 1 , '%s' )", name );	
 			
 	

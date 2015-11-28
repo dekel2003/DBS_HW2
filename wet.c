@@ -45,7 +45,7 @@ void* addUser(const char* name)
 	
 	printf("%s\n",res);
 	
-	printf("%d\n"PQresultStatus(res));
+	printf("%d\n",PQresultStatus(res));
 	
 
 	if(!res || PQresultStatus(res) != PGRES_TUPLES_OK)

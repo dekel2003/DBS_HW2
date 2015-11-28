@@ -62,7 +62,7 @@ void* addPhoto          (const char*    user_id,
                          const char*    photo_id){}
 void* tagPhoto          (const char*    user_id,
                          const char*    photo_id,
-                         const char*    info);
+                         const char*    info){}
 void* photosTags        (){}
 void* search            (const char*    word){}
 void* commonTags        (const char*    k){}

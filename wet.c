@@ -38,8 +38,15 @@ void* addUser(const char* name)
 	
 	sprintf(cmd,"INSERT INTO users(id, name) "
 			"VALUES ( (SELECT MAX(id) FROM users) +1 , '%s' )", name );	
+			
+	printf("%s\n",cmd);
 	
 	res = PQexec(conn,cmd);
+	
+	printf("%s\n",res);
+	
+	printf("%d\n"PQresultStatus(res));
+	
 
 	if(!res || PQresultStatus(res) != PGRES_TUPLES_OK)
 	{

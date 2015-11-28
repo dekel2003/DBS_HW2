@@ -30,7 +30,6 @@ int main(void)
 	return 0;
 }
 
-
 void* addUser(const char* name)
 {	
 	char cmd[2000] = {0};
@@ -54,6 +53,7 @@ void* addUser(const char* name)
 	char* id = PQgetvalue(res, 0, 0);
 	printf(ADD_USER, id);
 }
+
 /*
 Find the first row where there does not exist a row with Id + 10
 
@@ -61,10 +61,7 @@ SELECT TOP 1 t1.Id+1
 FROM table t1
 WHERE NOT EXISTS(SELECT * FROM table t2 WHERE t2.Id = t1.Id + 1)
 ORDER BY t1.Id
-
-<<<<<<< HEAD
 */
-=======
 
 void* addUserMin        (const char*    name){}
 void* removeUser        (const char*    id){}
@@ -81,4 +78,3 @@ void* similarPhotos     (const char*    k,
                          const char*    j){}
 void* autoPhotoOnTagOn  (){}
 void* autoPhotoOnTagOFF (){}
->>>>>>> 9d5ca3b200e86ef1656093522b7641959a9110a2

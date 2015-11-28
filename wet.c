@@ -22,5 +22,32 @@ int main(void)
 		return 1;
 	}
 
+	parseInput();
+	
+	/* Close the connection to the database and cleanup */
+	PQfinish(conn);
+	
 	return 0;
 }
+
+
+void* addUser(const char* name)
+{	
+	char cmd[2000] = {0};
+	PGresult *res;
+	
+	sprintf(cmd,"INSERT INTO users(id, name) "
+			"VALUES ( (SELECT MAX(id) FROM users) +1 , '%s' )", name );	
+	
+	res = PQexec(conn,cmd);
+
+	if(!res || PQresultStatus(res) != PGRES_TUPLES_OK)
+	{
+		fprintf(stderr, "Error executing query: %s\n",
+		PQresultErrorMessage(res));
+		PQclear(res);
+	}
+
+}
+
+

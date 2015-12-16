@@ -184,8 +184,44 @@ void* tagPhoto          (const char*    user_id,
 	EXE_SQL_CMD(cmd);	
 }
 
-void* photosTags        (){}
-void* search            (const char*    word){}
+void* photosTags        (){
+	char qry[2000] = {0};
+	sprintf(qry,"SELECT photos.user_id, photos.id, COUNT(info) as n "
+				"from photos "
+				"left outer join tags "
+				"ON(photos.id = tags.photo_id AND photos.user_id = tags.user_id) "
+				"GROUP BY photos.user_id, photos.id "
+				"ORDER BY n DESC , photos.user_id ,photos.id");
+				
+	PGresult *res = EXE_SQL_QRY(qry);
+	
+	int size = PQntuples(res);
+	if ( 0 == size){
+		printf(EMPTY);
+	}else{
+		printf(PHOTOS_HEADER);
+		{
+			int i = 0;
+			for( ; i < size; ++i)
+			{
+				char* id = PQgetvalue(res, i,0 );
+				char* pid = PQgetvalue(res, i,1 );
+				char* count = PQgetvalue(res, i,1 );
+				printf(PHOTOS_RESULT,id, pid, count);
+			}
+		}
+	}
+	PQclear(res);
+}
+
+void* search            (const char*    word){
+
+
+
+}
+
+
+
 void* commonTags        (const char*    k){}
 void* mostCommonTags    (const char*    k){}
 void* similarPhotos     (const char*    k,

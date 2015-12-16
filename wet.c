@@ -69,8 +69,8 @@ void* addUserMin        (const char*    name)
 	char cmd[2000] = {0};
 	PGresult *res;
 	
-	sprintf(cmd,"INSERT INTO users(id, name) ",
-				"VALUES ( (select COALESCE(MIN(ID +1)) From users as t1 ",
+	sprintf(cmd,"INSERT INTO users(id, name) "
+				"VALUES ( (select COALESCE(MIN(ID +1)) From users as t1 "
 				"where not exists (select * from users as t2 where t1.id +1 = t2.id) ), '%s' )", name );
 		
 	res = PQexec(conn,cmd);

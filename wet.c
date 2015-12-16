@@ -4,18 +4,18 @@
 PGconn *conn;
 
 
-#define SQL_QRY(res,query) do {\
-		res = PQexec(conn,query);\
+#define SQL_QRY(query) do {\
+		PGresult *res = PQexec(conn,query);\
 		if(!res || PQresultStatus(res) != PGRES_TUPLES_OK){\
-			fprintf(stderr, "Error executing query: %s\n", PQresultErrorMessage(res));\
+			fprintf(stderr, "SQL Error in query: %s\n", PQresultErrorMessage(res));\
 			PQclear(res);\
 			return;\
 		}} while(0)
 
-#define SQL_CMD(res,cmd) do {\
-		res = PQexec(conn,cmd);\
+#define SQL_CMD(cmd) do {\
+		PGresult *res = PQexec(conn,cmd);\
 		if(!res || PQresultStatus(res) != PGRES_COMMAND_OK){\
-			fprintf(stderr, "Error executing cmd: %s\n", PQresultErrorMessage(res));\
+			fprintf(stderr, "SQL Error in cmd: %s\n", PQresultErrorMessage(res));\
 			PQclear(res);\
 			return;\
 		}} while(0)
@@ -56,6 +56,8 @@ void* addUser(const char* name)
 	sprintf(cmd,"INSERT INTO users(id, name) "
 			"VALUES ( (SELECT COALESCE(MAX(id), -1) FROM users) + 1 , '%s' );", name );	
 			
+			SQL_CMD(cmd);
+	/*
 	res = PQexec(conn,cmd);
 	
 	if(!res || PQresultStatus(res) != PGRES_COMMAND_OK)
@@ -64,6 +66,7 @@ void* addUser(const char* name)
 		PQresultErrorMessage(res));
 		PQclear(res);
 	}
+	*/
 	
 	res = PQexec(conn,"(SELECT MAX(id) FROM users)");
 	

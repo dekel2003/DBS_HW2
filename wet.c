@@ -137,7 +137,7 @@ void* removeUser(const char* id)
 	sprintf(cmd,"delete from users where users.id=%s delete from photos"
 			    "where user_id=%s delete from tags where user_id=%s;",id, id, id);
 				
-	EXC_SQL_CMD(cmd);
+	EXE_SQL_CMD(cmd);
 }
 
 

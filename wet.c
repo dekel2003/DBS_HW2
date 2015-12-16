@@ -149,7 +149,7 @@ void* addPhoto          (const char*    user_id,
 	char qry[2000] = {0};
 	sprintf(qry,"select user_id from photos as t where t.user_id = '%s' AND t.id = '%s'",user_id, photo_id);
 	PGresult *res = EXE_SQL_QRY(qry);
-	if ( 0 == PQntuples(res)){
+	if ( 0 < PQntuples(res)){
 		PQclear(res);
 		printf(EXISTING_RECORD);
 		return 0;

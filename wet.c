@@ -113,19 +113,25 @@ void* addUserMin        (const char*    name)
 }
 void* removeUser(const char* id)
 {
-	char cmd1[2000] = {0}, cmd2[2000] = {0};
+	char cmd[2000] = {0}, qry[2000] = {0};
 	PGresult *res;
 	
-	sprintf(cmd2,"SELECT id FROM users WHERE id = %s",id);
+	sprintf(query,"SELECT id FROM users WHERE id = %s",id);
 	
+	res = EXC_SQL_QRY(qry);
+	if ( 0 == PQntuples(res)){
+		PQclear(res);
+		printf(ILL_PARAMS);
+		return;
+	}	
+	PQclear(res);
 	
-	sprintf(cmd1,"delete from users where users.id=%s delete from photos"
+	sprintf(cmd,"delete from users where users.id=%s delete from photos"
 			    "where user_id=%s delete from tags where user_id=%s;",id, id, id);
-
 	
+	res = EXC_SQL_CMD(cmd);
 
-
-
+	PQclear(res);
 }
 
 

@@ -4,26 +4,23 @@
 PGconn *conn;
 
 
-		PGresult* EXE_SQL_QRY(char* query){
-			PGresult* res = PQexec(conn,query);
-			if(!res || PQresultStatus(res) != PGRES_TUPLES_OK){
-				fprintf(stderr, "SQL Error in query: %s\n", PQresultErrorMessage(res));
-				PQclear(res);
-				return res;
-			}
-
-		} 
+PGresult* EXE_SQL_QRY(char* query){
+	PGresult* res = PQexec(conn,query);
+	if(!res || PQresultStatus(res) != PGRES_TUPLES_OK){
+		fprintf(stderr, "SQL Error in query: %s\n", PQresultErrorMessage(res));
+		PQclear(res);
+		return res;
+	}
+} 
 		
-		void EXE_SQL_CMD(char* cmd){
-			PGresult* res = PQexec(conn,query);
-			if(!res || PQresultStatus(res) != PGRES_COMMAND_OK){
-				fprintf(stderr, "SQL Error in cmd: %s\n", PQresultErrorMessage(res));
-				PQclear(res);
-				return res;
-			}
-		} 
-
-
+void EXE_SQL_CMD(char* cmd){
+	PGresult* res = PQexec(conn,query);
+	if(!res || PQresultStatus(res) != PGRES_COMMAND_OK){
+		fprintf(stderr, "SQL Error in cmd: %s\n", PQresultErrorMessage(res));
+		PQclear(res);
+		return res;
+	}
+} 
 
 int main(void)
 {
@@ -111,9 +108,9 @@ void* addUserMin        (const char*    name)
 	}
 	PQclear(res);
 }
-void* removeUser(const char* id)
-{
-	char cmd[2000] = {0}, qry[2000] = {0};
+
+int userExist(const char* id){
+	char qry[2000] = {0};
 	PGresult *res;
 	
 	sprintf(query,"SELECT id FROM users WHERE id = %s",id);
@@ -122,21 +119,33 @@ void* removeUser(const char* id)
 	if ( 0 == PQntuples(res)){
 		PQclear(res);
 		printf(ILL_PARAMS);
-		return;
+		return 0;
 	}	
 	PQclear(res);
+	return 1;
+}
+
+void* removeUser(const char* id)
+{
+	if (0 == userExist(id)) return;
 	
+	char cmd[2000] = {0};
 	sprintf(cmd,"delete from users where users.id=%s delete from photos"
 			    "where user_id=%s delete from tags where user_id=%s;",id, id, id);
-	
-	res = EXC_SQL_CMD(cmd);
-
-	PQclear(res);
+				
+	EXC_SQL_CMD(cmd);
 }
 
 
 void* addPhoto          (const char*    user_id,
-                         const char*    photo_id){}
+                         const char*    photo_id){				 
+	if (0 == userExist(id)) return;	
+
+	char cmd[2000] = {0};
+						 
+}
+
+
 void* tagPhoto          (const char*    user_id,
                          const char*    photo_id,
                          const char*    info){}

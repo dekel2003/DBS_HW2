@@ -36,9 +36,8 @@ void* addUser(const char* name)
 	PGresult *res;
 	
 	sprintf(cmd,"INSERT INTO users(id, name) "
-			"VALUES ( (SELECT COALESCE(MAX(id), -1) FROM users) + 1 , '%s' )", name );	
+			"VALUES ( (SELECT COALESCE(MAX(id), -1) FROM users) + 1 , '%s' );", name );	
 			
-	
 	res = PQexec(conn,cmd);
 	
 	if(!res || PQresultStatus(res) != PGRES_COMMAND_OK)
@@ -52,6 +51,8 @@ void* addUser(const char* name)
 	
 	char* id = PQgetvalue(res, 0, 0);
 	printf(ADD_USER, id);
+	
+	PQclear(res);
 }
 
 /*
@@ -63,8 +64,43 @@ WHERE NOT EXISTS(SELECT * FROM table t2 WHERE t2.Id = t1.Id + 1)
 ORDER BY t1.Id
 */
 
-void* addUserMin        (const char*    name){}
-void* removeUser        (const char*    id){}
+void* addUserMin        (const char*    name)
+{
+	char cmd[2000] = {0};
+	PGresult *res;
+	
+	sprintf(cmd,"select MIN(ID +1) From users as t1 "
+		"where not exists (select * from users as t2 where t1.id +1 = t2.id);", name );
+		
+	res = PQexec(conn,cmd);
+	
+	if(!res || PQresultStatus(res) != PGRES_COMMAND_OK)
+	{
+		fprintf(stderr, "Error executing query: %s\n",
+		PQresultErrorMessage(res));
+		PQclear(res);
+	}
+
+	res = PQexec(conn,"(SELECT id,name FROM users ORDER BY id)");
+	
+	int size = PQntuples(res);
+	printf(USER_HEADER);
+	
+	for( int i = 0; i < size; ++i)
+	{
+		char* id = PQgetvalue(res, i,0 );
+		char* name = PQgetvalue(res, i,1 );
+		printf(id, name);
+	}
+	
+	PQclear(res);
+}
+void* removeUser        (const char*    id)
+{
+
+}
+
+
 void* addPhoto          (const char*    user_id,
                          const char*    photo_id){}
 void* tagPhoto          (const char*    user_id,

@@ -157,7 +157,7 @@ void* addPhoto          (const char*    user_id,
 	PQclear(res);
 	
 	char cmd[2000] = {0};
-	sprintf(cmd, "INSERT INTO photos(id, user_id) VALUES(%s,%s)", user_id , photo_id );
+	sprintf(cmd, "INSERT INTO photos(id, user_id) VALUES(%s,%s)", photo_id ,user_id );
 	EXE_SQL_CMD(cmd);					 
 }
 

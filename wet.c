@@ -243,7 +243,9 @@ void* search            (const char*    word){
 	PQclear(res);			
 }
 
-void* commonTags        (const char*    k){}
+void* commonTags        (const char*    k){
+
+}
 void* mostCommonTags    (const char*    k){}
 void* similarPhotos     (const char*    k,
                          const char*    j){}

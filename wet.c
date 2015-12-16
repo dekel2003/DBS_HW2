@@ -51,24 +51,17 @@ int main(void)
 void* addUser(const char* name)
 {	
 	char cmd[2000] = {0};
-	PGresult *res;
+	char query[2000] = {0};
 	
 	sprintf(cmd,"INSERT INTO users(id, name) "
 			"VALUES ( (SELECT COALESCE(MAX(id), -1) FROM users) + 1 , '%s' );", name );	
 			
-			SQL_CMD(cmd);
-	/*
-	res = PQexec(conn,cmd);
+	SQL_CMD(cmd);
+
+	sprintf(query,"(SELECT MAX(id) FROM users)")
+	SQL_QRY(query);
 	
-	if(!res || PQresultStatus(res) != PGRES_COMMAND_OK)
-	{
-		fprintf(stderr, "Error executing query: %s\n",
-		PQresultErrorMessage(res));
-		PQclear(res);
-	}
-	*/
-	
-	res = PQexec(conn,"(SELECT MAX(id) FROM users)");
+	//PGresult *res = PQexec(conn,"(SELECT MAX(id) FROM users)");
 	
 	char* id = PQgetvalue(res, 0, 0);
 	printf(ADD_USER, id);

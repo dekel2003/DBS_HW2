@@ -91,12 +91,12 @@ void* addUserMin(const char*    name)
 				"VALUES ( (select COALESCE(MIN(ID +1)) From users as t1 "
 				"where not exists (select * from users as t2 where t1.id +1 = t2.id) ), '%s' )", name );
 		
-	EXE_SQL_CMD(cmd)
+	EXE_SQL_CMD(cmd);
 
-	res = EXE_SQL_QRY("(SELECT id,name FROM users ORDER BY id)")
+	sprintf(query,"(SELECT id,name FROM users ORDER BY id)");
+	res = EXE_SQL_QRY(query);
 	
 	printf(USER_HEADER);
-	
 	{
 		int size = PQntuples(res);
 		int i = 0;

@@ -13,7 +13,7 @@ PGconn *conn;
 		}} while(0)
 
 #define SQL_CMD(cmd) do {\
-		PGresult *res = PQexec(conn,cmd);\
+		res = PQexec(conn,cmd);\
 		if(!res || PQresultStatus(res) != PGRES_COMMAND_OK){\
 			fprintf(stderr, "SQL Error in cmd: %s\n", PQresultErrorMessage(res));\
 			PQclear(res);\
@@ -114,8 +114,20 @@ void* addUserMin        (const char*    name)
 	}
 	PQclear(res);
 }
-void* removeUser        (const char*    id)
+void* removeUser(const char* id)
 {
+	char cmd1[2000] = {0}, cmd2[2000] = {0};
+	PGresult *res;
+	
+	sprintf(cmd2,"SELECT id FROM users WHERE id = %s",id);
+	
+	
+	sprintf(cmd1,"delete from users where users.id=%s delete from photos"
+			    "where user_id=%s delete from tags where user_id=%s;",id, id, id);
+
+	
+
+
 
 }
 

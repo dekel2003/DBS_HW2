@@ -83,7 +83,7 @@ WHERE NOT EXISTS(SELECT * FROM table t2 WHERE t2.Id = t1.Id + 1)
 ORDER BY t1.Id
 */
 
-void* addUserMin        (const char*    name)
+void* addUserMin(const char*    name)
 {
 	char cmd[2000] = {0};
 	PGresult *res;
@@ -92,10 +92,9 @@ void* addUserMin        (const char*    name)
 				"VALUES ( (select COALESCE(MIN(ID +1)) From users as t1 "
 				"where not exists (select * from users as t2 where t1.id +1 = t2.id) ), '%s' )", name );
 		
-	SQL_CMD(cmd)
+	EXE_SQL_CMD(cmd)
 
-	res = SQL_QRY("(SELECT id,name FROM users ORDER BY id)")
-	//PQexec(conn,"(SELECT id,name FROM users ORDER BY id)");
+	res = EXE_SQL_QRY("(SELECT id,name FROM users ORDER BY id)")
 	
 	printf(USER_HEADER);
 	

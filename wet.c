@@ -93,7 +93,7 @@ void* addUserMin        (const char*    name)
 		{
 			char* id = PQgetvalue(res, i,0 );
 			char* name = PQgetvalue(res, i,1 );
-			printf(id, name);
+			printf(USER_RESULT,id, name);
 		}
 	}
 	PQclear(res);

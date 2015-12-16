@@ -4,20 +4,20 @@
 PGconn *conn;
 
 
-PGresult* EXE_SQL_QRY(char* query){
-	PGresult* res = PQexec(conn,query);
+PGresult* EXE_SQL_QRY(const char* query){
+	res = PQexec(conn,query);
 	if(!res || PQresultStatus(res) != PGRES_TUPLES_OK){
 		fprintf(stderr, "SQL Error in query: %s\n", PQresultErrorMessage(res));
 		PQclear(res);
-		return res;
+		return NULL;
 	}
+	return res;
 } 
 		
-void EXE_SQL_CMD(char* cmd){
+void EXE_SQL_CMD(const char* cmd){
 	PGresult* res = PQexec(conn,cmd);
 	if(!res || PQresultStatus(res) != PGRES_COMMAND_OK){
 		fprintf(stderr, "SQL Error in cmd: %s\n", PQresultErrorMessage(res));
-		PQclear(res);
 	}
 	PQclear(res);
 } 
@@ -64,7 +64,8 @@ void* addUser(const char* name)
 	
 
 	res = EXE_SQL_QRY(query);
-	
+	if (!res)
+		return NULL;
 	
 	char* id = PQgetvalue(res, 0, 0);
 	printf(ADD_USER, id);
@@ -84,6 +85,7 @@ ORDER BY t1.Id
 void* addUserMin(const char*    name)
 {
 	char cmd[2000] = {0};
+	char query[2000] = {0};
 	PGresult *res;
 	
 	sprintf(cmd,"INSERT INTO users(id, name) "
@@ -94,6 +96,8 @@ void* addUserMin(const char*    name)
 
 	sprintf(query,"(SELECT id,name FROM users ORDER BY id)");
 	res = EXE_SQL_QRY(query);
+	if (!res)
+		return NULL;
 	
 	printf(USER_HEADER);
 	{

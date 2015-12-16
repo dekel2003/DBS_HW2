@@ -3,6 +3,24 @@
 
 PGconn *conn;
 
+
+#define SQL_QRY(res,query) do {\
+		res = PQexec(conn,query);\
+		if(!res || PQresultStatus(res) != PGRES_TUPLES_OK){\
+			fprintf(stderr, "Error executing query: %s\n", PQresultErrorMessage(res));\
+			PQclear(res);\
+			return;\
+		}} while(0)
+
+#define SQL_CMD(res,cmd) do {\
+		res = PQexec(conn,cmd);\
+		if(!res || PQresultStatus(res) != PGRES_COMMAND_OK){\
+			fprintf(stderr, "Error executing cmd: %s\n", PQresultErrorMessage(res));\
+			PQclear(res);\
+			return;\
+		}} while(0)
+
+
 int main(void)
 {
 	char connect_param[200];

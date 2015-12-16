@@ -18,8 +18,8 @@ void EXE_SQL_CMD(char* cmd){
 	if(!res || PQresultStatus(res) != PGRES_COMMAND_OK){
 		fprintf(stderr, "SQL Error in cmd: %s\n", PQresultErrorMessage(res));
 		PQclear(res);
-		return res;
 	}
+	PQclear(res);
 } 
 
 
@@ -116,7 +116,8 @@ void* removeUser(const char* id)
 	
 	sprintf(query,"SELECT id FROM users WHERE id = %s",id);
 	
-	res = EXC_SQL_QRY(qry);
+	res = EXC_SQL_QRY(query);
+
 	if ( 0 == PQntuples(res)){
 		PQclear(res);
 		printf(ILL_PARAMS);

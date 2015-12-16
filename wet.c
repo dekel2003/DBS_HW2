@@ -4,24 +4,23 @@
 PGconn *conn;
 
 
-		PGresult* EXE_SQL_QRY(char* query){
-			PGresult* res = PQexec(conn,query);
-			if(!res || PQresultStatus(res) != PGRES_TUPLES_OK){
-				fprintf(stderr, "SQL Error in query: %s\n", PQresultErrorMessage(res));
-				PQclear(res);
-				return res;
-			}
-
-		} 
+PGresult* EXE_SQL_QRY(char* query){
+	PGresult* res = PQexec(conn,query);
+	if(!res || PQresultStatus(res) != PGRES_TUPLES_OK){
+		fprintf(stderr, "SQL Error in query: %s\n", PQresultErrorMessage(res));
+		PQclear(res);
+		return res;
+	}
+} 
 		
-		void EXE_SQL_CMD(char* cmd){
-			PGresult* res = PQexec(conn,query);
-			if(!res || PQresultStatus(res) != PGRES_COMMAND_OK){
-				fprintf(stderr, "SQL Error in cmd: %s\n", PQresultErrorMessage(res));
-				PQclear(res);
-				return res;
-			}
-		} 
+void EXE_SQL_CMD(char* cmd){
+	PGresult* res = PQexec(conn,cmd);
+	if(!res || PQresultStatus(res) != PGRES_COMMAND_OK){
+		fprintf(stderr, "SQL Error in cmd: %s\n", PQresultErrorMessage(res));
+		PQclear(res);
+		return res;
+	}
+} 
 
 
 

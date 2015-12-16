@@ -58,7 +58,7 @@ void* addUser(const char* name)
 			
 	SQL_CMD(cmd);
 
-	sprintf(query,"(SELECT MAX(id) FROM users)")
+	sprintf(query,"(SELECT MAX(id) FROM users)");
 	SQL_QRY(query);
 	
 	//PGresult *res = PQexec(conn,"(SELECT MAX(id) FROM users)");

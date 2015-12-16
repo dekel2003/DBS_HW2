@@ -5,7 +5,7 @@ PGconn *conn;
 
 
 PGresult* EXE_SQL_QRY(const char* query){
-	res = PQexec(conn,query);
+	PGresult* res = PQexec(conn,query);
 	if(!res || PQresultStatus(res) != PGRES_TUPLES_OK){
 		fprintf(stderr, "SQL Error in query: %s\n", PQresultErrorMessage(res));
 		PQclear(res);

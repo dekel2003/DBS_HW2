@@ -118,7 +118,7 @@ int userExist(const char* id){
 	
 	sprintf(qry,"SELECT id FROM users WHERE id = %s",id);
 	
-	PGresult *res = EXC_SQL_QRY(qry);
+	PGresult *res = EXE_SQL_QRY(qry);
 
 	if ( 0 == PQntuples(res)){
 		PQclear(res);
@@ -137,7 +137,7 @@ void* removeUser(const char* id)
 	sprintf(cmd,"delete from users where users.id=%s delete from photos"
 			    "where user_id=%s delete from tags where user_id=%s;",id, id, id);
 				
-	EXC_SQL_CMD(cmd);
+	EXE_SQL_CMD(cmd);
 }
 
 

@@ -5,7 +5,7 @@ PGconn *conn;
 
 
 #define SQL_QRY(query) do {\
-		PGresult *res = PQexec(conn,query);\
+		res = PQexec(conn,query);\
 		if(!res || PQresultStatus(res) != PGRES_TUPLES_OK){\
 			fprintf(stderr, "SQL Error in query: %s\n", PQresultErrorMessage(res));\
 			PQclear(res);\
@@ -49,7 +49,7 @@ int main(void)
 }
 
 void* addUser(const char* name)
-{	
+{	PGresult *res;
 	char cmd[2000] = {0};
 	char query[2000] = {0};
 	
@@ -59,6 +59,8 @@ void* addUser(const char* name)
 	SQL_CMD(cmd);
 
 	sprintf(query,"(SELECT MAX(id) FROM users)");
+	
+
 	SQL_QRY(query);
 	
 	//PGresult *res = PQexec(conn,"(SELECT MAX(id) FROM users)");

@@ -115,7 +115,7 @@ int userExist(const char* id){
 	char query[2000] = {0};
 	PGresult *res;
 	
-	sprintf(query,"SELECT id FROM users WHERE id = %s",id);
+	sprintf(query,"SELECT id FROM users WHERE id = '%s'",id);
 	
 	res = EXC_SQL_QRY(query);
 

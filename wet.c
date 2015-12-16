@@ -83,16 +83,18 @@ void* addUserMin        (const char*    name)
 
 	res = PQexec(conn,"(SELECT id,name FROM users ORDER BY id)");
 	
-	int size = PQntuples(res);
 	printf(USER_HEADER);
 	
-	for( int i = 0; i < size; ++i)
 	{
-		char* id = PQgetvalue(res, i,0 );
-		char* name = PQgetvalue(res, i,1 );
-		printf(id, name);
+		int size = PQntuples(res);
+		int i = 0;
+		for( ; i < size; ++i)
+		{
+			char* id = PQgetvalue(res, i,0 );
+			char* name = PQgetvalue(res, i,1 );
+			printf(id, name);
+		}
 	}
-	
 	PQclear(res);
 }
 void* removeUser        (const char*    id)

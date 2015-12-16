@@ -148,9 +148,9 @@ void* addPhoto          (const char*    user_id,
 
 	/*Check if photo+user in photos. */
 	char qry[2000] = {0};
+	sprintf(qry,"select user_id from tags as t where t.user_id = '%s' AND t.photo_id = '%s'",user_id, photo_id);
 	
 	
-	"select user_id from tags as t where t.user_id = 20 AND t.photo_id = 1"
 	
 	
 	

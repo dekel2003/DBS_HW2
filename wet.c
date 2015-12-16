@@ -206,7 +206,7 @@ void* photosTags        (){
 			{
 				char* id = PQgetvalue(res, i,0 );
 				char* pid = PQgetvalue(res, i,1 );
-				char* count = PQgetvalue(res, i,1 );
+				char* count = PQgetvalue(res, i,2 );
 				printf(PHOTOS_RESULT,id, pid, count);
 			}
 		}
@@ -215,12 +215,33 @@ void* photosTags        (){
 }
 
 void* search            (const char*    word){
-
-
-
+	char qry[2000] = {0};
+	sprintf(qry,"select photo_id, user_id, count(info) as n "
+				"from tags t "
+				"where t.info LIKE '%r%' "
+				"group by photo_id, user_id "
+				"GROUP BY photos.user_id, photos.id "
+				"ORDER BY n DESC , user_id ,photo_id DESC");
+	PGresult *res = EXE_SQL_QRY(qry);
+	
+	int size = PQntuples(res);
+	if ( 0 == size){
+		printf(EMPTY);
+	}else{
+		printf(PHOTOS_HEADER);
+		{
+			int i = 0;
+			for( ; i < size; ++i)
+			{
+				char* pid = PQgetvalue(res, i,0 );
+				char* id = PQgetvalue(res, i,1 );
+				char* count = PQgetvalue(res, i,2 );
+				printf(PHOTOS_RESULT,count,id, pid);
+			}
+		}
+	}
+	PQclear(res);			
 }
-
-
 
 void* commonTags        (const char*    k){}
 void* mostCommonTags    (const char*    k){}

@@ -4,7 +4,8 @@
 PGconn *conn;
 
 
-		PGresult* SQL_QRY(char* query){
+<<<<<<< HEAD
+		PGresult* EXE_SQL_QRY(char* query){
 			PGresult* res = PQexec(conn,query);
 			if(!res || PQresultStatus(res) != PGRES_TUPLES_OK){
 				fprintf(stderr, "SQL Error in query: %s\n", PQresultErrorMessage(res));
@@ -14,7 +15,7 @@ PGconn *conn;
 
 		} 
 		
-		void SQL_CMD(char* cmd){
+		void EXE_SQL_CMD(char* cmd){
 			PGresult* res = PQexec(conn,query);
 			if(!res || PQresultStatus(res) != PGRES_COMMAND_OK){
 				fprintf(stderr, "SQL Error in cmd: %s\n", PQresultErrorMessage(res));
@@ -22,6 +23,23 @@ PGconn *conn;
 				return res;
 			}
 		} 
+=======
+#define SQL_QRY(query) do {\
+		res = PQexec(conn,query);\
+		if(!res || PQresultStatus(res) != PGRES_TUPLES_OK){\
+			fprintf(stderr, "SQL Error in query: %s\n", PQresultErrorMessage(res));\
+			PQclear(res);\
+			return;\
+		}} while(0)
+
+#define SQL_CMD(cmd) do {\
+		res = PQexec(conn,cmd);\
+		if(!res || PQresultStatus(res) != PGRES_COMMAND_OK){\
+			fprintf(stderr, "SQL Error in cmd: %s\n", PQresultErrorMessage(res));\
+			PQclear(res);\
+			return;\
+		}} while(0)
+>>>>>>> origin/master
 
 
 int main(void)
@@ -59,12 +77,12 @@ void* addUser(const char* name)
 	sprintf(cmd,"INSERT INTO users(id, name) "
 			"VALUES ( (SELECT COALESCE(MAX(id), -1) FROM users) + 1 , '%s' );", name );	
 			
-	SQL_CMD(cmd);
+	EXE_SQL_CMD(cmd);
 
 	sprintf(query,"(SELECT MAX(id) FROM users)");
 	
 
-	res = SQL_QRY(query);
+	res = EXE_SQL_QRY(query);
 	
 	
 	char* id = PQgetvalue(res, 0, 0);
@@ -110,8 +128,20 @@ void* addUserMin        (const char*    name)
 	}
 	PQclear(res);
 }
-void* removeUser        (const char*    id)
+void* removeUser(const char* id)
 {
+	char cmd1[2000] = {0}, cmd2[2000] = {0};
+	PGresult *res;
+	
+	sprintf(cmd2,"SELECT id FROM users WHERE id = %s",id);
+	
+	
+	sprintf(cmd1,"delete from users where users.id=%s delete from photos"
+			    "where user_id=%s delete from tags where user_id=%s;",id, id, id);
+
+	
+
+
 
 }
 

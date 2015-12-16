@@ -118,7 +118,8 @@ int userExist(const char* id){
 	
 	sprintf(qry,"SELECT id FROM users WHERE id = %s",id);
 	
-	PGresult *res = EXC_SQL_QRY(qry);
+	PGresult *res;
+	res = EXC_SQL_QRY(qry);
 
 	if ( 0 == PQntuples(res)){
 		PQclear(res);

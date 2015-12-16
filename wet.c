@@ -23,7 +23,6 @@ void EXE_SQL_CMD(char* cmd){
 } 
 
 
-
 int main(void)
 {
 	char connect_param[200];
@@ -110,10 +109,10 @@ void* addUserMin(const char*    name)
 	}
 	PQclear(res);
 }
-void* removeUser(const char* id)
-{
+
+int userExist(const char* id){
+	char qry[2000] = {0};
 	char query[2000] = {0};
-	char cmd[2000] = {0}, qry[2000] = {0};
 	PGresult *res;
 	
 	sprintf(query,"SELECT id FROM users WHERE id = %s",id);
@@ -123,21 +122,33 @@ void* removeUser(const char* id)
 	if ( 0 == PQntuples(res)){
 		PQclear(res);
 		printf(ILL_PARAMS);
-		return;
+		return 0;
 	}	
 	PQclear(res);
+	return 1;
+}
+
+void* removeUser(const char* id)
+{
+	if (0 == userExist(id)) return;
 	
+	char cmd[2000] = {0};
 	sprintf(cmd,"delete from users where users.id=%s delete from photos"
 			    "where user_id=%s delete from tags where user_id=%s;",id, id, id);
-	
-	res = EXC_SQL_CMD(cmd);
-
-	PQclear(res);
+				
+	EXC_SQL_CMD(cmd);
 }
 
 
 void* addPhoto          (const char*    user_id,
-                         const char*    photo_id){}
+                         const char*    photo_id){				 
+	if (0 == userExist(id)) return;	
+
+	char cmd[2000] = {0};
+						 
+}
+
+
 void* tagPhoto          (const char*    user_id,
                          const char*    photo_id,
                          const char*    info){}

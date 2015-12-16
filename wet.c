@@ -5,7 +5,7 @@ PGconn *conn;
 
 
 PGresult* EXE_SQL_QRY(const char* query){
-	PGresult* res = PQexec(conn,query);
+	res = PQexec(conn,query);
 	if(!res || PQresultStatus(res) != PGRES_TUPLES_OK){
 		fprintf(stderr, "SQL Error in query: %s\n", PQresultErrorMessage(res));
 		PQclear(res);
@@ -118,8 +118,7 @@ int userExist(const char* id){
 	
 	sprintf(qry,"SELECT id FROM users WHERE id = %s",id);
 	
-	PGresult *res;
-	res = EXC_SQL_QRY(qry);
+	PGresult *res = EXC_SQL_QRY(qry);
 
 	if ( 0 == PQntuples(res)){
 		PQclear(res);
@@ -144,18 +143,22 @@ void* removeUser(const char* id)
 
 void* addPhoto          (const char*    user_id,
                          const char*    photo_id){				 
-	if (0 == userExist(id)) return;	
+	if (0 == userExist(user_id)) return;	
 
 	/*Check if photo+user in photos. */
 	char qry[2000] = {0};
-	sprintf(qry,"select user_id from tags as t where t.user_id = '%s' AND t.photo_id = '%s'",user_id, photo_id);
-	
-	
-	
-	
+	sprintf(qry,"select user_id from photos as t where t.user_id = '%s' AND t.id = '%s'",user_id, photo_id);
+	PGresult *res = EXC_SQL_QRY(qry);
+	if ( 0 == PQntuples(res)){
+		PQclear(res);
+		printf(EXISTING_RECORD);
+		return 0;
+	}	
+	PQclear(res);
 	
 	char cmd[2000] = {0};
-						 
+	sprintf(cmd, "INSERT INTO photos(id, user_id) VALUES(%s,%s)", user_id , photo_id );
+	EXE_SQL_CMD(cmd);					 
 }
 
 

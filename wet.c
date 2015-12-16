@@ -14,13 +14,14 @@ PGresult* EXE_SQL_QRY(char* query){
 } 
 		
 void EXE_SQL_CMD(char* cmd){
-	PGresult* res = PQexec(conn,query);
+	PGresult* res = PQexec(conn,cmd);
 	if(!res || PQresultStatus(res) != PGRES_COMMAND_OK){
 		fprintf(stderr, "SQL Error in cmd: %s\n", PQresultErrorMessage(res));
 		PQclear(res);
-		return res;
 	}
+	PQclear(res);
 } 
+
 
 int main(void)
 {
@@ -80,7 +81,7 @@ WHERE NOT EXISTS(SELECT * FROM table t2 WHERE t2.Id = t1.Id + 1)
 ORDER BY t1.Id
 */
 
-void* addUserMin        (const char*    name)
+void* addUserMin(const char*    name)
 {
 	char cmd[2000] = {0};
 	PGresult *res;
@@ -89,13 +90,12 @@ void* addUserMin        (const char*    name)
 				"VALUES ( (select COALESCE(MIN(ID +1)) From users as t1 "
 				"where not exists (select * from users as t2 where t1.id +1 = t2.id) ), '%s' )", name );
 		
-	SQL_CMD(cmd)
+	EXE_SQL_CMD(cmd);
 
-	res = SQL_QRY("(SELECT id,name FROM users ORDER BY id)")
-	//PQexec(conn,"(SELECT id,name FROM users ORDER BY id)");
+	sprintf(query,"(SELECT id,name FROM users ORDER BY id)");
+	res = EXE_SQL_QRY(query);
 	
 	printf(USER_HEADER);
-	
 	{
 		int size = PQntuples(res);
 		int i = 0;
@@ -115,7 +115,8 @@ int userExist(const char* id){
 	
 	sprintf(query,"SELECT id FROM users WHERE id = %s",id);
 	
-	res = EXC_SQL_QRY(qry);
+	res = EXC_SQL_QRY(query);
+
 	if ( 0 == PQntuples(res)){
 		PQclear(res);
 		printf(ILL_PARAMS);

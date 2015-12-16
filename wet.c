@@ -85,6 +85,7 @@ ORDER BY t1.Id
 void* addUserMin(const char*    name)
 {
 	char cmd[2000] = {0};
+	char query[2000] = {0};
 	PGresult *res;
 	
 	sprintf(cmd,"INSERT INTO users(id, name) "
@@ -111,6 +112,7 @@ void* addUserMin(const char*    name)
 }
 void* removeUser(const char* id)
 {
+	char query[2000] = {0};
 	char cmd[2000] = {0}, qry[2000] = {0};
 	PGresult *res;
 	

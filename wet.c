@@ -111,11 +111,10 @@ void* addUserMin(const char*    name)
 
 int userExist(const char* id){
 	char qry[2000] = {0};
-	PGresult *res;
 	
-	sprintf(query,"SELECT id FROM users WHERE id = %s",id);
+	sprintf(qry,"SELECT id FROM users WHERE id = %s",id);
 	
-	res = EXC_SQL_QRY(query);
+	PGresult *res = EXC_SQL_QRY(qry);
 
 	if ( 0 == PQntuples(res)){
 		PQclear(res);
@@ -142,6 +141,14 @@ void* addPhoto          (const char*    user_id,
                          const char*    photo_id){				 
 	if (0 == userExist(id)) return;	
 
+	/*Check if photo+user in photos. */
+	char qry[2000] = {0};
+	
+	
+	"select user_id from tags as t where t.user_id = 20 AND t.photo_id = 1"
+	
+	
+	
 	char cmd[2000] = {0};
 						 
 }

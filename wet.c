@@ -5,7 +5,7 @@ PGconn *conn;
 
 
 PGresult* EXE_SQL_QRY(const char* query){
-	res = PQexec(conn,query);
+	PGresult* res = PQexec(conn,query);
 	if(!res || PQresultStatus(res) != PGRES_TUPLES_OK){
 		fprintf(stderr, "SQL Error in query: %s\n", PQresultErrorMessage(res));
 		PQclear(res);
@@ -148,7 +148,7 @@ void* addPhoto          (const char*    user_id,
 	/*Check if photo+user in photos. */
 	char qry[2000] = {0};
 	sprintf(qry,"select user_id from photos as t where t.user_id = '%s' AND t.id = '%s'",user_id, photo_id);
-	PGresult *res = EXC_SQL_QRY(qry);
+	PGresult *res = EXE_SQL_QRY(qry);
 	if ( 0 == PQntuples(res)){
 		PQclear(res);
 		printf(EXISTING_RECORD);

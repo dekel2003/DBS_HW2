@@ -4,21 +4,24 @@
 PGconn *conn;
 
 
-#define SQL_QRY(query) do {\
-		res = PQexec(conn,query);\
-		if(!res || PQresultStatus(res) != PGRES_TUPLES_OK){\
-			fprintf(stderr, "SQL Error in query: %s\n", PQresultErrorMessage(res));\
-			PQclear(res);\
-			return;\
-		}} while(0)
+		PGresult* SQL_QRY(char* query){
+			PGresult* res = PQexec(conn,query);
+			if(!res || PQresultStatus(res) != PGRES_TUPLES_OK){
+				fprintf(stderr, "SQL Error in query: %s\n", PQresultErrorMessage(res));
+				PQclear(res);
+				return res;
+			}
 
-#define SQL_CMD(cmd) do {\
-		PGresult *res = PQexec(conn,cmd);\
-		if(!res || PQresultStatus(res) != PGRES_COMMAND_OK){\
-			fprintf(stderr, "SQL Error in cmd: %s\n", PQresultErrorMessage(res));\
-			PQclear(res);\
-			return;\
-		}} while(0)
+		} 
+		
+		void SQL_CMD(char* cmd){
+			PGresult* res = PQexec(conn,query);
+			if(!res || PQresultStatus(res) != PGRES_COMMAND_OK){
+				fprintf(stderr, "SQL Error in cmd: %s\n", PQresultErrorMessage(res));
+				PQclear(res);
+				return res;
+			}
+		} 
 
 
 int main(void)
@@ -61,9 +64,8 @@ void* addUser(const char* name)
 	sprintf(query,"(SELECT MAX(id) FROM users)");
 	
 
-	SQL_QRY(query);
+	res = SQL_QRY(query);
 	
-	//PGresult *res = PQexec(conn,"(SELECT MAX(id) FROM users)");
 	
 	char* id = PQgetvalue(res, 0, 0);
 	printf(ADD_USER, id);
@@ -89,16 +91,10 @@ void* addUserMin        (const char*    name)
 				"VALUES ( (select COALESCE(MIN(ID +1)) From users as t1 "
 				"where not exists (select * from users as t2 where t1.id +1 = t2.id) ), '%s' )", name );
 		
-	res = PQexec(conn,cmd);
-	
-	if(!res || PQresultStatus(res) != PGRES_COMMAND_OK)
-	{
-		fprintf(stderr, "Error executing query: %s\n",
-		PQresultErrorMessage(res));
-		PQclear(res);
-	}
+	SQL_CMD(cmd)
 
-	res = PQexec(conn,"(SELECT id,name FROM users ORDER BY id)");
+	res = SQL_QRY("(SELECT id,name FROM users ORDER BY id)")
+	//PQexec(conn,"(SELECT id,name FROM users ORDER BY id)");
 	
 	printf(USER_HEADER);
 	

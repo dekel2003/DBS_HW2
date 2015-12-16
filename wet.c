@@ -164,7 +164,26 @@ void* addPhoto          (const char*    user_id,
 
 void* tagPhoto          (const char*    user_id,
                          const char*    photo_id,
-                         const char*    info){}
+                         const char*    info){
+	if (0 == userExist(user_id)) return;
+	
+	/*Check if photo+user+info in photos. */
+	char qry[2000] = {0};
+	sprintf(qry,"select user_id from tags as t "
+				"where t.user_id = '%s' AND t.photo_id = '%s' AND t.info = %s",user_id, photo_id,info);
+	PGresult *res = EXE_SQL_QRY(qry);
+	if ( 0 < PQntuples(res)){
+		PQclear(res);
+		printf(EXISTING_RECORD);
+		return 0;
+	}	
+	PQclear(res);					 
+	
+	char cmd[2000] = {0};
+	sprintf(cmd, "INSERT INTO tags(photo_id, user_id,info) VALUES(%s,%s,%s)", photo_id ,user_id,info );
+	EXE_SQL_CMD(cmd);	
+}
+
 void* photosTags        (){}
 void* search            (const char*    word){}
 void* commonTags        (const char*    k){}

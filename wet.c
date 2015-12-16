@@ -4,7 +4,6 @@
 PGconn *conn;
 
 
-<<<<<<< HEAD
 		PGresult* EXE_SQL_QRY(char* query){
 			PGresult* res = PQexec(conn,query);
 			if(!res || PQresultStatus(res) != PGRES_TUPLES_OK){
@@ -23,23 +22,7 @@ PGconn *conn;
 				return res;
 			}
 		} 
-=======
-#define SQL_QRY(query) do {\
-		res = PQexec(conn,query);\
-		if(!res || PQresultStatus(res) != PGRES_TUPLES_OK){\
-			fprintf(stderr, "SQL Error in query: %s\n", PQresultErrorMessage(res));\
-			PQclear(res);\
-			return;\
-		}} while(0)
 
-#define SQL_CMD(cmd) do {\
-		res = PQexec(conn,cmd);\
-		if(!res || PQresultStatus(res) != PGRES_COMMAND_OK){\
-			fprintf(stderr, "SQL Error in cmd: %s\n", PQresultErrorMessage(res));\
-			PQclear(res);\
-			return;\
-		}} while(0)
->>>>>>> origin/master
 
 
 int main(void)

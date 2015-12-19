@@ -180,7 +180,7 @@ void* tagPhoto          (const char*    user_id,
 	PQclear(res);					 
 	
 	char cmd[2000] = {0};
-	sprintf(cmd, "INSERT INTO tags(photo_id, user_id,info) VALUES(%s,%s,%s)", photo_id ,user_id,info );
+	sprintf(cmd, "INSERT INTO tags(photo_id,user_id,info) VALUES(%s,%s,'%s')", photo_id ,user_id,info );
 	EXE_SQL_CMD(cmd);	
 }
 

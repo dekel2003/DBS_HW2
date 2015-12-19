@@ -1,0 +1,31 @@
+addPhoto 5 3 #illegal parameters
+addPhoto 1 23 #already exist
+addPhoto 3 11
+photosTags
+tagPhoto 5 3 #illegal parameters
+addPhoto 3 11
+tagPhoto 3 11 Sky
+tagPhoto 3 11 Sky #already exist
+photosTags
+tagPhoto 3 11 Man
+search Sky
+search Car
+search Hi #empty
+search Skyp #empty
+search sky #empty
+search r
+search y
+commonTags 1
+commonTags 2
+commonTags 3
+tagPhoto 3 11 Bridge
+commonTags 3
+commonTags 4 #empty
+mostCommonTags 4
+mostCommonTags 3
+mostCommonTags 2
+mostCommonTags 1
+mostCommonTags 6
+similarPhotos 1 1
+similarPhotos 1 2
+similarPhotos 2 1

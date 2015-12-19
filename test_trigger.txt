@@ -1,0 +1,5 @@
+tagPhoto 3 25 #photo 25 should not be in photos list
+autoPhotoOnTagOn
+tagPhoto 3 26 #photo 26 should be in photos list
+autoPhotoOnTagOff
+tagPhoto 2 27 #photo 27 should not be in photos list

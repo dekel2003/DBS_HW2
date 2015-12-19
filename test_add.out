@@ -1,0 +1,18 @@
+Empty
+Empty
+Empty
+Empty
+Illegal parameters
+User ID: 0
+.--------------.--------------.
+|   User ID    |  User Name   |
+.--------------.--------------.
+| 0            | Natan        |
+User ID: 1
+User ID: 2
+User ID: 3
+.--------------.--------------.
+|   User ID    |  User Name   |
+.--------------.--------------.
+| 1            | Odelia       |
+| 2            | Odelia       |

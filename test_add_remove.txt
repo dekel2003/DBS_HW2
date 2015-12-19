@@ -1,0 +1,17 @@
+removeUser 1
+removeUser 3
+removeUser 0
+removeUser 2
+photosTags #empty
+mostCommonTags 4 #empty
+commonTags 3 #empty
+similarPhotos 2 4 #empty
+removeUser 4 #illegal parameters
+addUser Natan #should be id 0
+removeUser 0 
+addUserMin Natan #should be id 0
+addUser Barak #should be id 1
+addUser Odelia #should be id 2
+removeUser 1
+addUser Tom #should be id 3
+addUserMin Odelia #should be id 1

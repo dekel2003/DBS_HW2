@@ -1,0 +1,16 @@
+addUserMin  Eyal
+addPhoto 4 10
+addPhoto 5 10 #ILL PARAM
+addPhoto 0 0 #exists
+tagPhoto 1 20 Sky
+tagPhoto 1 20 Sky #exist
+autoPhotoOnTagOn
+tagPhoto 3 100 Sky
+photosTags
+search  //valid test?
+search hiThereImUsingWhatsapp! #empty
+commonTags 0
+mostCommonTags 1
+mostCommonTags 2
+similarPhotos 1 1
+similarPhotos 1 3

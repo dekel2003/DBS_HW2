@@ -218,10 +218,10 @@ void* search            (const char*    word){
 	char qry[2000] = {0};
 	sprintf(qry,"select photo_id, user_id, count(info) as n "
 				"from tags t "
-				"where t.info LIKE '%%%r%%' "
+				"where t.info LIKE '%%%s%%' "
 				"group by photo_id, user_id "
 				"GROUP BY photos.user_id, photos.id "
-				"ORDER BY n DESC , user_id ,photo_id DESC");
+				"ORDER BY n DESC , user_id ,photo_id DESC",word);
 	PGresult *res = EXE_SQL_QRY(qry);
 	
 	int size = PQntuples(res);

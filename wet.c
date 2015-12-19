@@ -233,9 +233,9 @@ void* search            (const char*    word){
 			for( ; i < size; ++i)
 			{
 				char* pid = PQgetvalue(res, i,0 );
-				char* id = PQgetvalue(res, i,1 );
+				char* uid = PQgetvalue(res, i,1 );
 				char* count = PQgetvalue(res, i,2 );
-				printf(PHOTOS_RESULT,count,id, pid);
+				printf(PHOTOS_RESULT,uid,pid,count);
 			}
 		}
 	}
@@ -321,7 +321,7 @@ void* similarPhotos(const char* k, const char* j){
 			{
 				char* id = PQgetvalue(res, i,0 );
 				char* name = PQgetvalue(res, i,1 );
-				char* pid = PQgetvalue(res, i,1 );
+				char* pid = PQgetvalue(res, i,2 );
 				printf(SIMILAR_RESULT, id, name, pid);
 			}
 		}

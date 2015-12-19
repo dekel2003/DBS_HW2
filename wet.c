@@ -268,7 +268,7 @@ void* mostCommonTags(const char* k){
 	char cmd1[2000] = {0};
 	char cmd2[2000] = {0};
 	char qry[2000] = {0};
-	sprintf(cmd1 , "CREATE VIEW tagsPhotos AS SELECT info ,COUNT(*) as num FROM tags GROUP BY info");
+	sprintf(cmd1 , "CREATE VIEW tagsPhotos AS SELECT info ,COUNT(*) as n FROM tags GROUP BY info");
 	sprintf(qry, 
 	"SELECT A.info, A.n FROM tagsPhotos A "
 		"WHERE (SELECT COUNT(*) FROM tagsPhotos B WHERE B.n > A.n OR (B.n = A.n AND B.info < A.info)) < %s "

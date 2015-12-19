@@ -272,7 +272,7 @@ void* mostCommonTags(const char* k){
 	sprintf(qry, 
 	"SELECT A.info, A.n FROM tagsPhotos A "
 		"WHERE (SELECT COUNT(*) FROM tagsPhotos B WHERE B.n > A.n OR (B.n = A.n AND B.info < A.info)) < %s "
-		"OORDER BY A.n DESC, A.info;" , k);
+		"ORDER BY A.n DESC, A.info;" , k);
 	sprintf(cmd2 , "DROP VIEW tagsPhotos;");
 	
 	EXE_SQL_CMD(cmd1);

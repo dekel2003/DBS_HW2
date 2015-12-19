@@ -170,7 +170,7 @@ void* tagPhoto          (const char*    user_id,
 	/*Check if photo+user+info in photos. */
 	char qry[2000] = {0};
 	sprintf(qry,"select user_id from tags as t "
-				"where t.user_id = '%s' AND t.photo_id = '%s' AND t.info = %s",user_id, photo_id,info);
+				"where t.user_id = %s AND t.photo_id = %s AND t.info = '%s'",user_id, photo_id,info);
 	PGresult *res = EXE_SQL_QRY(qry);
 	if ( 0 < PQntuples(res)){
 		PQclear(res);

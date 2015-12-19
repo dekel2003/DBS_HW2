@@ -240,14 +240,115 @@ void* search            (const char*    word){
 			}
 		}
 	}
-	PQclear(res);			
+	PQclear(res);
 }
 
-void* commonTags        (const char*    k){
-
+void* commonTags(const char* k){
+	char qry[2000] = {0};
+	sprintf(qry,"SELECT info ,COUNT(*) as n FROM tags GROUP BY info HAVING COUNT(*) >= %s ORDER BY n DESC,info ",k);
+	PGresult *res = EXE_SQL_QRY(qry);
+	int size = PQntuples(res);
+	if ( 0 == size){
+		printf(EMPTY);
+	}else{
+		printf(COMMON_HEADER);
+		{
+			int i = 0;
+			for( ; i < size; ++i)
+			{
+				char* info = PQgetvalue(res, i,0 );
+				char* count = PQgetvalue(res, i,1 );
+				printf(COMMON_LINE, info, count);
+			}
+		}
+	}
+	PQclear(res);
 }
-void* mostCommonTags    (const char*    k){}
-void* similarPhotos     (const char*    k,
-                         const char*    j){}
-void* autoPhotoOnTagOn  (){}
-void* autoPhotoOnTagOFF (){}
+
+void* mostCommonTags(const char* k){
+	char cmd1[2000] = {0};
+	char cmd2[2000] = {0};
+	char qry[2000] = {0};
+	sprintf(cmd1 , "CREATE VIEW tagsPhotos AS SELECT info ,COUNT(*) as num FROM tags GROUP BY info");
+	sprintf(qry, 
+	"SELECT A.info, A.n FROM tagsPhotos A "
+		"WHERE (SELECT COUNT(*) FROM tagsPhotos B WHERE B.n > A.n OR (B.n = A.n AND B.info < A.info)) < %s "
+		"OORDER BY A.n DESC, A.info;" , k);
+	sprintf(cmd2 , "DROP VIEW tagsPhotos;");
+	
+	EXE_SQL_CMD(cmd1);
+	PGresult *res = EXE_SQL_QRY(qry);
+	EXE_SQL_CMD(cmd2);
+	
+	int size = PQntuples(res);
+	if ( 0 == size){
+		printf(EMPTY);
+	}else{
+		printf(COMMON_HEADER);
+		{
+			int i = 0;
+			for( ; i < size; ++i)
+			{
+				char* info = PQgetvalue(res, i,0 );
+				char* count = PQgetvalue(res, i,1 );
+				printf(COMMON_LINE, info, count);
+			}
+		}
+	}
+	PQclear(res);
+}
+
+void* similarPhotos(const char* k, const char* j){
+	char qry[2000] = {0};
+	sprintf(qry , "SELECT A.id , users.name , A.photo_id FROM ("
+		"SELECT B.user_id as id, B.photo_id as photo_id FROM tags B, tags C "
+			"WHERE B.info = C.info AND (B.user_id <> C.user_id OR B.photo_id <> C.photo_id) "
+			"GROUP BY B.user_id, B.photo_id, C.user_id, C.photo_id "
+			"HAVING COUNT(*) >= %s ) A ,users "
+		"WHERE A.id = users.id "
+		"GROUP BY A.id , users.name , A.photo_id "
+		"HAVING COUNT(*) >= %s"
+		"ORDER BY A.id, A.photo_id", j,k);
+	PGresult *res = EXE_SQL_QRY(qry);
+	
+	int size = PQntuples(res);
+	if ( 0 == size){
+		printf(EMPTY);
+	}else{
+		printf(SIMILAR_HEADER);
+		{
+			int i = 0;
+			for( ; i < size; ++i)
+			{
+				char* id = PQgetvalue(res, i,0 );
+				char* name = PQgetvalue(res, i,1 );
+				char* pid = PQgetvalue(res, i,1 );
+				printf(SIMILAR_RESULT, id, name, pid);
+			}
+		}
+	}
+	PQclear(res);	
+}
+
+void* autoPhotoOnTagOn (){
+	char* cmd = "CREATE OR REPLACE FUNCTION myTriggerFunc() "
+		"RETURNS TRIGGER AS $$ "
+			"BEGIN "
+				"IF (NEW.user_id  IN (SELECT id FROM users ) AND (NEW.photo_id , NEW.user_id) NOT IN (SELECT * FROM photos)) THEN "
+					"INSERT INTO photos(user_id,id) VALUES(NEW.user_id,NEW.photo_id); "
+				"END IF; "
+			"RETURN NEW; "
+			"END; "
+		"$$ LANGUAGE plpgsql; "
+		"CREATE TRIGGER myTrigger "
+		"BEFORE INSERT ON tags "
+		"FOR EACH ROW EXECUTE PROCEDURE myTriggerFunc(); ";
+	EXE_SQL_CMD(cmd);
+}
+
+void* autoPhotoOnTagOFF (){
+	PGresult *res_trigger,*res_func;
+	char* cmd = "DROP TRIGGER IF EXISTS  myTrigger ON tags; "
+		"DROP FUNCTION IF EXISTS myTriggerFunc();";
+	EXE_SQL_CMD(cmd);
+}

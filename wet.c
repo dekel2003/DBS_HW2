@@ -94,7 +94,7 @@ void* addUserMin(const char*    name)
 		
 	EXE_SQL_CMD(cmd);
 
-	sprintf(query,"(SELECT id,name FROM users WHERE name = %s ORDER BY id)",name);
+	sprintf(query,"(SELECT id,name FROM users WHERE name = '%s' ORDER BY id)",name);
 	res = EXE_SQL_QRY(query);
 	if (!res)
 		return NULL;

@@ -218,7 +218,7 @@ void* search            (const char*    word){
 	char qry[2000] = {0};
 	sprintf(qry,"select photo_id, user_id, count(info) as n "
 				"from tags t "
-				"where t.info LIKE '%r%' "
+				"where t.info LIKE '%%%r%%' "
 				"group by photo_id, user_id "
 				"GROUP BY photos.user_id, photos.id "
 				"ORDER BY n DESC , user_id ,photo_id DESC");
